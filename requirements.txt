@@ -5,7 +5,7 @@ Django==4.2.4
 django-recaptcha==4.0.0
 experta==1.9.4
 filelock==3.14.0
-frozendict==2.4.4
+frozendict
 gunicorn==23.0.0
 numpy==2.2.6
 packaging==25.0
