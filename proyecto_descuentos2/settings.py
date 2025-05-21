@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from decouple import config
 from django.contrib.messages import constants as mensajes_error
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crum.CurrentRequestUserMiddleware',
     'proyecto_descuentos2.middleware.RedirectUnauthenticatedMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     
 ]
 
@@ -98,14 +100,13 @@ WSGI_APPLICATION = 'proyecto_descuentos2.wsgi.application'
 
 #Base de datos DE MICA? -_-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', cast=int),  # Conviértelo a entero
-    },
+    'default': dj_database_url.config(
+        default=f"postgres://{config('DB_USER')}:{config('DB_PASSWORD')}@{config('DB_HOST')}:{config('DB_PORT')}/{config('DB_NAME')}",
+        conn_max_age=600,  # opcional, para conexiones persistentes
+        ssl_require=False,  # si usás SSL en producción podés cambiarlo a True
+    )
+
+    ,
     'supabase': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': config('SUPABASE_DB_NAME'),
