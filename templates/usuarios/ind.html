@@ -13,19 +13,38 @@ Index
     /* Clip-path para cortar la parte inferior del fondo */
 .clip-bg {
     clip-path: polygon(0 0, 40% 0, 50% 30%, 0 30%);
-    backgroundColor: #114172;
+    backgroundColor:rgb(255, 126, 126);
     height: 300px;
 }
 .gradient-bottom {
 
-    background: linear-gradient(to bottom,rgb(255, 181, 181) 50%, rgb(231, 229, 229) 100%);
+    background: linear-gradient(to bottom,rgb(255, 126, 126) 40%, rgb(231, 229, 229) 100%);
     height: 300px;
 }
-
+#botones-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Espaciado entre los botones */
+    margin-top: 2rem;
+}
 </style>
+<div class="relative w-full overflow-hidden h-[300px]">
+    <div class="carousel-track flex">
+        <div class="flex-shrink-0 w-full h-[300px]" style="background-image: url('media/3.png');"></div>
+        <div class="flex-shrink-0 w-full h-[300px]" style="background-image: url('media/banner3.png');"></div>
+        <div class="flex-shrink-0 w-full h-[300px] bg-cover bg-center" style="background-image: url('media/4.png');"></div>
+    </div>
 
+    <!-- Botones de navegación -->
+    <button id="prev" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700">
+        ❮
+    </button>
+    <button id="next" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700">
+        ❯
+    </button>
+</div>
  
-<h1 class="bg-gray-700 px-4 py-4 mt-1   text-center text-white font-bold text-2xl">MIRÁ LOS ÚLTIMOS DESCUENTOS PUBLICADOS</h1>
+<h1 class="bg-[#191930] px-4 py-4 mt-1   text-center text-white font-bold text-2xl">MIRÁ LOS ÚLTIMOS DESCUENTOS PUBLICADOS</h1>
 
 <section class="w-full flex justify-center mt-4 mb-8 shadow-xl">
     <div class="flex w-full max-w-7xl gap-4">
@@ -106,18 +125,12 @@ Index
 <script src="https://cdn.jsdelivr.net/npm/leaflet.animatedmarker/src/AnimatedMarker.js"></script>
 <script src="{% static 'js/L.Icon.Pulse.js' %}"></script>
 
-
-
 </section>
-
 {% if user.is_authenticated %}
-<h1 class="bg-gray-700 px-4 py-4 mb-6  text-center text-white font-bold text-2xl">ENCONTRÁ LOS MEJORES DESCUENTOS EN NUESTRA SECCION DE PRODUCTOS DESTACADOS</h1>
+<h1 class="bg-[#191930] px-4 py-4 mb-6  text-center text-white font-bold text-2xl">ENCONTRÁ LOS MEJORES DESCUENTOS EN NUESTRA SECCION DE PRODUCTOS DESTACADOS</h1>
 {% else %}
-<h1 class="bg-gray-700 px-4 py-4 mb-6  text-center text-white font-bold text-2xl">INICIA SESION Y ENCONTRÁ LOS MEJORES DESCUENTOS EN NUESTRA SECCION DE PRODUCTOS DESTACADOS</h1>
-
+<h1 class="bg-[#191930] px-4 py-4 mb-6  text-center text-white font-bold text-2xl">INICIA SESION Y ENCONTRÁ LOS MEJORES DESCUENTOS EN NUESTRA SECCION DE PRODUCTOS DESTACADOS</h1>
 {% endif %}
-
-
 <div class="relative overflow-hidden bg-white">
     <div class="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
       <div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
@@ -181,57 +194,25 @@ Index
 <div class="relative bg-red-200 py-12 flex justify-center gradient-bottom">
     <!-- Pseudoelemento para el corte -->
     <div class="relative">
-        <h2 class="text-gray-800 text-2xl font-bold">Ofertas disponibles</h2> <br>
+        <h2 class="text-[#191930] text-2xl font-bold">Ofertas disponibles</h2> <br>
         
         <div class="before-clip">
         </div>
     </div>
     
 </div>
-<div class="relative flex p-5 justify-center gap-40 -mt-40 px-4 z-10">
-    {% for oferta in ofertas_con_calificaciones %}
-    <!-- Tarjeta 1 -->
-    <a href="{% url 'detalle_oferta' oferta.oferta.id %}" class="bg-white rounded-lg shadow-2xl transform hover:-translate-y-2 transition-all duration-300 w-48">
-        {% if oferta.oferta.imagen %}
-            <img src="{{ oferta.oferta.imagen.url }}" alt="{{ oferta.titulo }}" class="w-full h-32 object-cover">
-        {% else %}
-            <img src="{{ MEDIA_URL }}default_image.png" alt="Imagen por defecto" class="w-full h-32 object-cover">
-        {% endif %}
-        <div class="p-4">
-            <p class="text-gray-700 text-sm mb-2">{{oferta.oferta.titulo}}</p>
-            <p class="text-green-600 font-bold">{{oferta.oferta.precio_oferta}}</p>
-            <div class="flex items-center mt-2">
-                <p class="text-xl font-bold mr-2">{{ oferta.calificacion_promedio|floatformat:1 }}</p>
-                {% for i in "12345" %}
-                    {% if forloop.counter <= oferta.calificacion_promedio %}
-                    <label class="text-xl text-orange-400">★</label>
-                    {% else %}
-                    <label class="text-xl text-gray-300">★</label>
-                    {% endif %}
-                {% endfor %}
-                
-            </div>
-        </div>
-        
-        {% if oferta.oferta.fecha_fin == hoy %}
-            <div class="absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                Hasta hoy
-            </div>
-        {% endif %}
-        {% if oferta.oferta.fecha_fin == manana %}
-            <div class="absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                Hasta mañana
-            </div>
-        {% endif %}
-    </a>
-    {%endfor%}
-</div> 
-<div class="text-center mt-8">
-    <button class="bg-red-600 transform hover:-translate-y-2 transition-all duration-300 w-48 hover:bg-red-800 text-white font-semibold py-2 px-6 rounded-full shadow-lg">
-        Quiero ver todo
+
+<div id="ofertas-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-5 -mt-40 px-4 z-10 justify-items-center">
+</div>
+<div id="botones-container" class="flex justify-center mt-8">
+    <button id="load-more-btn" class="bg-red-600 transform hover:-translate-y-2 transition-all duration-300 w-48 hover:bg-red-800 text-white font-semibold py-2 px-6 rounded-full shadow-lg">
+        Ver más
+    </button>
+    <button id="show-less-btn" class="bg-gray-600 transform hover:-translate-y-2 transition-all duration-300 w-48 hover:bg-gray-800 text-white font-semibold py-2 px-6 rounded-full shadow-lg hidden">
+        Ver menos
     </button>
 </div>
-<br>
+
 
 <div class="bg-gray-200 rounded-lg shadow-md relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
@@ -771,32 +752,101 @@ Index
     }
 </script>
 <script>
-    {% comment %} function openModal(id) {
-        console.log(id);
-        const comerciosEnRadio = {{ comercios_en_radio|safe }};
-        const modal = document.getElementById("modal");
-        function openModal(id) {
-            const modal = document.getElementById("modal");
-            const ubicacionOferta = comerciosEnRadio.find(comercio => comercio.id === id);
-            const mapContainer = document.getElementById("map-modal");
-                setTimeout(() => {
-                    const mapInstance = L.map("map-modal");
-                    mapInstance.invalidateSize();
-                }, 200);
-        }
-        console.log(':', comerciosEnRadio);
-        
-        
-    }
+    let page = 1;
+let isLoading = false; // Evitar solicitudes duplicadas
+let ofertasCargadas = []; // Guardar las ofertas cargadas
+
+// Función para cargar ofertas
+function cargarOfertas() {
+    if (isLoading) return; // Evitar solicitudes simultáneas
+    isLoading = true;
+
+    fetch(`/ruta-a-cargar-ofertas?page=${page}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Error al cargar ofertas');
+            return response.json();
+        })
+        .then(data => {
+            const container = document.getElementById('ofertas-container');
+            data.ofertas.forEach(oferta => {
+                ofertasCargadas.push(oferta); // Guardar la oferta cargada
+
+                const ofertaHTML = `
+                    <a href="/detalle_oferta/${oferta.id}" class="bg-white rounded-lg shadow-2xl transform hover:-translate-y-2 transition-all duration-300 w-48">
+                        <img src="${oferta.imagen || '/media/default_image.png'}" alt="${oferta.titulo}" class="w-full h-32 object-cover">
+                        <div class="p-4">
+                            <p class="text-gray-700 font-bold">${oferta.titulo}</p>
+                            <p class="text-gray-600 line-through">${oferta.precio_normal}</p>
+                            <p class="text-green-600 font-bold">${oferta.precio_oferta}</p>
+                            <div class="flex items-center mt-2">
+                                <p class="text-xl font-bold mr-2">${parseFloat(oferta.calificacion_promedio).toFixed(1)}</p>
+                                ${oferta.estrellas_html}
+                            </div>
+                        </div>
+                        ${oferta.etiqueta_fecha ? `<div class="absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded">${oferta.etiqueta_fecha}</div>` : ''}
+                    </a>`;
+                container.insertAdjacentHTML('beforeend', ofertaHTML);
+            });
+
+            if (!data.has_next) {
+                document.getElementById('load-more-btn').style.display = 'none';
+                document.getElementById('show-less-btn').style.display = 'block'; // Mostrar botón "Ver menos"
+            }
+        })
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            isLoading = false; // Liberar bandera
+        });
+}
+
+// Función para ocultar las ofertas adicionales
+function ocultarOfertas() {
+    const container = document.getElementById('ofertas-container');
+    container.innerHTML = ''; // Vaciar el contenedor
+    ofertasCargadas = []; // Reiniciar las ofertas cargadas
+    page = 1; // Reiniciar la paginación
+    document.getElementById('show-less-btn').style.display = 'none'; // Ocultar botón "Ver menos"
+    document.getElementById('load-more-btn').style.display = 'block'; // Mostrar botón "Ver más"
+    cargarOfertas(); // Volver a cargar las ofertas iniciales
+}
+
+// Llamar a cargarOfertas al hacer clic en el botón "Ver más"
+document.getElementById('load-more-btn').addEventListener('click', function () {
+    page++;
+    cargarOfertas();
+});
+
+// Llamar a ocultarOfertas al hacer clic en el botón "Ver menos"
+document.getElementById('show-less-btn').addEventListener('click', function () {
+    ocultarOfertas();
+});
+
+// Cargar las primeras ofertas al iniciar la página
+document.addEventListener('DOMContentLoaded', function () {
+    cargarOfertas();
+});
+
     
-    function closeModal() {
-        const modal = document.getElementById("modal");
-        if (modal) {
-            modal.style.display = "none"; // Oculta el modal
-        }
-    }
- {% endcomment %}
+
 </script>
+<script>
+    const track = document.querySelector('.carousel-track');
+    const slides = document.querySelectorAll('.carousel-track > div');
+    const nextButton = document.getElementById('next');
+    const prevButton = document.getElementById('prev');
+    let currentIndex = 0;
+
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    });
+
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    });
+</script>
+
 <script>
     const scrollContainer = document.getElementById('scroll-container');
     
